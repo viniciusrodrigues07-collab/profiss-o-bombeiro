@@ -1,0 +1,60 @@
+// ===== MENU MOBILE =====
+const menuToggle = document.querySelector('.menu-toggle');
+const nav = document.querySelector('.nav');
+const navLinks = document.querySelectorAll('.nav-list a');
+
+if (menuToggle && nav) {
+  // Abrir / fechar menu
+  menuToggle.addEventListener('click', () => {
+    const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+    menuToggle.setAttribute('aria-expanded', !isExpanded);
+    nav.classList.toggle('open');
+  });
+
+  // Fechar o menu ao clicar em um link (útil no celular)
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+// ===== SCROLL SUAVE (reforço para navegadores antigos) =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      e.preventDefault();
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+// ===== DESTACAR LINK ATIVO NO MENU ENQUANTO ROLE =====
+const sections = document.querySelectorAll('section[id]');
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.pageYOffset;
+
+  sections.forEach(section => {
+    const sectionHeight = section.offsetHeight;
+    const sectionTop = section.offsetTop - 100;
+    const sectionId = section.getAttribute('id');
+    const correspondingLink = document.querySelector(`.nav-list a[href="#${sectionId}"]`);
+
+    if (correspondingLink) {
+      if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+        correspondingLink.classList.add('active');
+      } else {
+        correspondingLink.classList.remove('active');
+      }
+    }
+  });
+});
