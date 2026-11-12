@@ -75,6 +75,7 @@ ul {
 }
 
 .header-inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -135,11 +136,16 @@ ul {
 .menu-toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 8px;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  z-index: 10;
 }
 
 .menu-toggle span {
@@ -148,7 +154,22 @@ ul {
   height: 3px;
   background: var(--branco);
   border-radius: 2px;
-  transition: var(--transicao);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+/* Estado aberto: transforma em X */
+.menu-toggle.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* ===== Hero ===== */
@@ -594,9 +615,10 @@ ul {
 
 .barra-fill {
   height: 100%;
+  width: 0; /* começa zerado; o JS anima até o valor do data-value */
   background: linear-gradient(90deg, var(--vermelho), var(--vermelho-claro));
   border-radius: 11px;
-  transition: width 1s ease-out;
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .barra-valor {
@@ -709,10 +731,11 @@ ul {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.35s ease;
+    z-index: 999;
   }
 
   .main-nav.open {
-    max-height: 300px;
+    max-height: 320px;
   }
 
   .main-nav ul {
